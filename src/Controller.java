@@ -1,13 +1,19 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
 public class Controller {
 
     private Socket clSocket;
+    private DataOutputStream os;
+    private DataInputStream is;
 
     public Controller(){
         try {
             clSocket = new Socket("localhost", 44);
+            os = new DataOutputStream(clSocket.getOutputStream());
+            is = new DataInputStream(clSocket.getInputStream());
         }
         catch(IOException e){
             System.out.println(e);
