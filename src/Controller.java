@@ -22,7 +22,6 @@ public class Controller {
 
     public String printAllStudents(){
         String str = "";
-
         return str;
     }
 
