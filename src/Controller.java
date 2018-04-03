@@ -1,4 +1,18 @@
+import java.io.IOException;
+import java.net.Socket;
+
 public class Controller {
+
+    private Socket clSocket;
+
+    public Controller(){
+        try {
+            clSocket = new Socket("localhost", 44);
+        }
+        catch(IOException e){
+            System.out.println(e);
+        }
+    }
 
     public String printAllStudents(){
         String str = "";
