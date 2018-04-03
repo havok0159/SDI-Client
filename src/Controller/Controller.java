@@ -1,9 +1,11 @@
+package Controller;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Controller {
+public class Controller implements IController{
 
     private Socket clSocket;
     private DataOutputStream os;
@@ -63,7 +65,7 @@ public class Controller {
         return str;
     }
 
-    public void gradeStudent(int sid, int pid, int grade){
+    public void gradeStudent(int sid, int pid, double grade){
 
     }
 
