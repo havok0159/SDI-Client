@@ -1,18 +1,33 @@
 
+import Common.Service.LabProblemsService;
+import Controller.Controller;
+
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class UI {
     private int code;
     private String cmd;
     //private IRepository repository;
-    private Controller controller;
+    private LabProblemsService controller;
 
-    public UI (Controller cntr){
+    public UI (LabProblemsService cntr){
         //this.repository = repository;
         this.controller = cntr;
     }
 
-    public int run(){
+    private void printResult(CompletableFuture<String >result){
+        try {
+            System.out.print(result.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int run() throws ExecutionException, InterruptedException {
         Scanner scanner = new Scanner(System.in);
         code = 1;
         System.out.println("UI v0.1");
@@ -38,21 +53,24 @@ public class UI {
 
             int sid, gid, pid, grade;
             String sname, pdesc;
+            CompletableFuture<String> result;
             switch(cmd) {
                 case "0":
                     code = 0;
                     return code;
                 case "1":
-                    System.out.print(controller.printAllStudents());
+                    result=controller.getAllStudents();
+                    printResult(result);
                     break;
                 case "2":
-                    System.out.print(controller.printAllProblems());
+                    result=controller.getAllProblems();
+                    printResult(result);
                     break;
                 case "3":
                     System.out.println("Enter Student ID:");
                     try {
                         sid = scanner.nextInt();
-                        System.out.print(controller.printProblemsByStudID(sid));
+                        System.out.print("not ready");
                     }
                     catch(java.util.InputMismatchException e){
                         System.out.print("Invalid character. Expected int.");
@@ -63,14 +81,14 @@ public class UI {
                     gid = scanner.nextInt();
                     System.out.println("Enter Problem ID:");
                     pid = scanner.nextInt();
-                    controller.assignProblemToGroup(gid, pid);
+                    controller.assignProblemToGroup(gid+";"+ pid);
                     break;
                 case "5":
                     System.out.println("Enter Student ID:");
                     sid = scanner.nextInt();
                     System.out.println("Enter Problem ID:");
                     pid = scanner.nextInt();
-                    controller.assignProblemToStudent(sid, pid);
+                    controller.assignProblemToStudent(sid+";"+ pid);
                     break;
                 case "6":
                     System.out.println("Enter Student ID:");
@@ -79,47 +97,47 @@ public class UI {
                     sname = scanner.next();
                     System.out.println("Enter Student Group:");
                     gid = scanner.nextInt();
-                    controller.addStudent(sid, sname, gid);
+                    controller.addStudent(sid+";"+sname+";"+ gid);
                     break;
                 case "7":
                     System.out.println("Enter Problem ID:");
                     pid = scanner.nextInt();
                     System.out.println("Enter Problem Description:");scanner.nextLine();
                     pdesc = scanner.nextLine();
-                    controller.addProblem(pid, pdesc);
+                    controller.addProblem(pid+";"+ pdesc);
                     break;
                 case "8":
                     System.out.println("Enter Student ID:");
                     sid = scanner.nextInt();
-                    System.out.print(controller.printGradesByStudID(sid));
+                    System.out.print("not ready");
                     break;
                 case "9":
                     System.out.println("Enter Student ID:");
                     try {
                         sid = scanner.nextInt();
-                        System.out.print(controller.printProblemsByStudID(sid));
+                        System.out.print("ups");
                         System.out.println("Enter Problem ID:");
                         pid = scanner.nextInt();
                         System.out.println("Enter Grade:");
                         grade = scanner.nextInt();
-                        controller.gradeStudent(sid, pid, grade);
+                        controller.gradeStudent(sid+";"+ pid+";"+ grade);
                     }
                     catch(java.util.InputMismatchException e){
                         System.out.print("Invalid character. Expected int.");
                     }
                     break;
                 case "99":
-                    controller.loadDatabaseFromFile();
+                    //controller.loadDatabaseFromFile();
                     break;
                 case "100":
                     System.out.println("Enter path to students file:");
                     String pathStud = scanner.next();
                     System.out.println("Enter path to problems file:");
                     String pathProb = scanner.next();
-                    controller.loadDatabaseFromFile(pathStud,pathProb);
+                    //controller.loadDatabaseFromFile(pathStud,pathProb);
                     break;
                 case "101":
-                    controller.saveDatabaseToFile();
+                    //controller.saveDatabaseToFile();
 
             }
             System.out.println("\nPress Enter to continue...");
